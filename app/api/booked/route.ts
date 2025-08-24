@@ -1,22 +1,23 @@
 import { NextRequest } from 'next/server'
-import fs from 'node:fs/promises'
-import path from 'node:path'
+import { supabase } from '@/lib/supabase'
 
-const DATA = path.join(process.cwd(), 'data', 'bookings.json')
-
-async function readStore(){
-  try{
-    const raw = await fs.readFile(DATA, 'utf8')
-    return JSON.parse(raw) as Record<string, Array<{time:string}>>
-  }catch{
-    return {}
-  }
-}
-
-export async function GET(req: NextRequest){
+export async function GET(req: NextRequest) {
   const date = new URL(req.url).searchParams.get('date') || ''
-  const store = await readStore()
-  const day = Array.isArray(store[date]) ? store[date] : []
-  const busy = day.map(x => x.time)
+
+  if (!date) {
+    return Response.json({ busy: [] })
+  }
+
+  // Pega reservas do Supabase
+  const { data, error } = await supabase
+    .from('bookings')
+    .select('time')
+    .eq('date', date)
+
+  if (error) {
+    return Response.json({ error: error.message }, { status: 500 })
+  }
+
+  const busy = data?.map(x => x.time) || []
   return Response.json({ busy })
 }

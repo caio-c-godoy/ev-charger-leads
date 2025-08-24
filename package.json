@@ -3,16 +3,17 @@
   "version": "1.0.0",
   "private": true,
   "engines": {
-  "node": "20.x",
-  "npm": "10.x"
+    "node": "20.x",
+    "npm": "10.x"
   },
- "scripts": {
-  "dev": "next dev",
-  "dev:host": "next dev -p 3000 -h 0.0.0.0",
-  "build": "next build",
-  "start": "node .next/standalone/server.js"
-},
+  "scripts": {
+    "dev": "next dev",
+    "dev:host": "next dev -p 3000 -h 0.0.0.0",
+    "build": "next build",
+    "start": "node .next/standalone/server.js"
+  },
   "dependencies": {
+    "@supabase/supabase-js": "^2.56.0",
     "@types/node": "20.14.10",
     "@types/nodemailer": "^7.0.0",
     "@types/react": "18.3.3",
@@ -30,6 +31,5 @@
     "twilio": "^5.8.0",
     "typescript": "5.5.4",
     "zod": "3.23.8"
-  },
-  "devDependencies": {}
+  }
 }
