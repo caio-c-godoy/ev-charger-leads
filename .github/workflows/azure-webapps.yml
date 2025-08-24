@@ -1,0 +1,46 @@
+name: Build and Deploy Next.js (Standalone) to Azure WebApp
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Baixar o código
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Configurar Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      # 3. Instalar dependências
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Build do Next.js em modo standalone
+      - name: Build Next.js app
+        run: npm run build
+
+      # 5. Preparar artefatos para deploy
+      - name: Prepare app for deploy
+        run: |
+          mkdir deploy
+          cp -r .next/standalone/* deploy/
+          cp -r .next/static deploy/.next/
+          cp -r public deploy/public || true
+
+      # 6. Deploy para Azure WebApp
+      - name: Deploy to Azure WebApp
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: evvictoriousapp
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          package: deploy

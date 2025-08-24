@@ -1,0 +1,53 @@
+/* app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variáveis de tema */
+:root{
+  --bg1: #f0f7ff;
+  --bg2: #ffffff;
+  --blobA: #7ec2ff33;
+  --blobB: #208ff722;   /* brand-500 com transparência */
+  --blobC: #0d427914;   /* brand-800 suave */
+}
+
+/* Fundo com gradiente e manchas suaves */
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(1200px 700px at 10% -10%, var(--blobA) 0%, transparent 55%),
+    radial-gradient(900px 600px at 110% 20%, var(--blobB) 0%, transparent 60%),
+    radial-gradient(700px 520px at 50% 120%, var(--blobC) 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg1), var(--bg2));
+}
+
+/* Cartões “glass” */
+.card-glass{
+  background: rgba(255,255,255,.90);
+  border: 1px solid rgba(10,46,74,.14);
+  backdrop-filter: blur(6px);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(10,46,74,.12);
+}
+
+
+/* Padrão do herói (leve brilho diagonal) */
+.heroPattern{
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+}
+.heroPattern:after{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    radial-gradient(1200px 800px at 80% -10%, rgba(32,143,247,.18), transparent 60%),
+    radial-gradient(900px 700px  at -10% 120%, rgba(13,66,121,.16), transparent 60%);
+  pointer-events:none;
+}
+
+/* Scrollbars bonitinhas */
+* { scrollbar-width: thin; scrollbar-color: #cbd5e1 transparent; }
+*::-webkit-scrollbar{ width:8px; height:8px; }
+*::-webkit-scrollbar-thumb{ background:#cbd5e1; border-radius:999px; }
