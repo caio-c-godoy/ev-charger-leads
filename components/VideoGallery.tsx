@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Modal from './Modal'
 
 type VideoItem = { src: string; poster?: string }
@@ -16,37 +16,45 @@ export function VideoGallery() {
   const [viewer, setViewer] = useState<{ type: 'video'; src: string } | null>(null)
   const refs = useRef<(HTMLVideoElement | null)[]>([])
 
+  // 🔹 Força autoplay em todos os vídeos logo no carregamento
+  useEffect(() => {
+    refs.current.forEach((v) => {
+      if (v) {
+        v.muted = true
+        v.play().catch(() => {})
+      }
+    })
+  }, [])
+
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
         {VIDEOS.map((v, i) => (
           <button
             key={i}
-            className="group overflow-hidden rounded-2xl border bg-white p-0 shadow-soft transition hover:shadow-md focus:outline-none"
+            type="button"
+            className="group relative overflow-hidden rounded-2xl border bg-white p-0 shadow-soft transition hover:shadow-md focus:outline-none"
             onClick={() => setViewer({ type: 'video', src: v.src })}
             aria-label="Open video"
           >
             <div className="relative">
               <video
-            ref={(el) => {            // <-- bloco com chaves
-              refs.current[i] = el     // sem retornar nada
-            }}
-            src={v.src}
-            poster={v.poster}
-            muted
-            playsInline
-            preload="metadata"
-            className="h-48 w-full object-cover transition duration-300 group-hover:scale-[1.02]"
-            onMouseEnter={() => refs.current[i]?.play().catch(() => {})}
-            onMouseLeave={() => refs.current[i]?.pause()}
-          />
-
+                ref={(el) => { refs.current[i] = el }}
+                src={v.src}
+                poster={v.poster}
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                className="h-48 w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+              />
             </div>
-            {/* sem título embaixo, proposital */}
           </button>
         ))}
       </div>
 
+      {/* Modal SEM título */}
       <Modal open={!!viewer} onClose={() => setViewer(null)} maxWidth="max-w-5xl">
         {viewer && (
           <video

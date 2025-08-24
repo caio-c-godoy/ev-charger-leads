@@ -70,11 +70,10 @@ export default function OurStructure() {
         ))}
       </div>
 
-      {/* Modal com vídeo ampliado */}
+      {/* Modal com vídeo ampliado — sem título */}
       <Modal
         open={openIdx !== null}
         onClose={() => setOpenIdx(null)}
-        title={t('structure_modal_title') || 'Estrutura – vídeo'}
         maxWidth="max-w-5xl"
       >
         {openIdx !== null && (
